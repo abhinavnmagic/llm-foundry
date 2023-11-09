@@ -352,6 +352,17 @@ def gsm8k_preprocessing_function(inp: Dict):
         raise ValueError(f"Unable to extract prompt/response from inp={inp}") from e
 
 
+@dataset_constructor.register('theblackcat102/evol-codealpaca-v1')
+def evolcodealpaca_preprocessing_function(inp: Dict):
+    try:
+        prompt = "Below is an instruction that describes a programming task. Write a program that appropriately completes the request.\n\n### Instruction:\n{instruction}\n\n### Response:\n".format(instruction=inp['instruction'])
+        response = inp['output']
+    except Exception as e:
+        raise ValueError(
+            f"Unable to extract prompt/response from 'text'={inp['text']}"
+        ) from e
+    return {'prompt': prompt, 'response': response}
+
 @dataset_constructor.register('garage-bAInd/Open-Platypus')
 def openplatypus_preprocessing_function(inp: Dict):
     try:
@@ -362,7 +373,6 @@ def openplatypus_preprocessing_function(inp: Dict):
             f"Unable to extract prompt/response from 'text'={inp['text']}"
         ) from e
     return {'prompt': prompt, 'response': response}
-
 
 @dataset_constructor.register('tatsu-lab/alpaca')
 def alpaca_preprocessing_function(inp: Dict):
